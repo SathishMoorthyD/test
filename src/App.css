@@ -13,18 +13,79 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.fontdate {
+  position: relative;
+}
+
+.fontdate i{
+  position: absolute;
+  left: 160px;
+  top: 10px;
+  color: green;
+}
+.fonticon i{
+  /* position: absolute; */
+  /* left: 125px; */
+  /* top: 10px; */
+  color: rgb(209, 216, 209);
+}
+.fontline {
+  position: relative;
+}
+
+.fontline i{
+  position: absolute;
+  left: 90px;
+  top: 10px;
+  color: green;
+}
 
 .app-header {
-  background-color:rgb(163, 230, 215);
+  background-color:white ;
 height: 100vh;
   display: flex;
   flex-direction: column;
-
+font-size: 14px;
 }
 .body {
   flex: 1;
   display: flex;
  
+}
+.bg-approve-status{
+  background-color: #33b892;
+  width: 125px;
+  /* height: 30px; */
+  /* margin: 22.5px 63.1px 25.5px 195px;
+  padding: 5px 48px 4px 49px; */
+  /* border-radius: 15px; */
+  /* text-align:center; */
+  /* border: solid 1px #33b892; */
+  
+}
+.bg-waiting-status{
+  background-color: #2f74eb;
+  /* border: solid 1px #2a68d3; */
+  width: 125px;
+  /*height: 30px;
+  margin: 22.5px 63.1px 25.5px 195px;
+  padding: 5px 48px 4px 49px; */
+  /* border-radius: 15px; */
+}
+.bg-reject-status{
+  background-color: #fa675c;
+  /* border: solid 1px #fa675c; */
+ width: 125px;
+  /* height: 30px;
+  margin: 22.5px 63.1px 25.5px 195px;
+  padding: 5px 48px 4px 49px; */ 
+  /* border-radius: 15px; */
+  /* margin: 18.5px 63.1px 20.5px 195px; */
+}
+
+.table-header{
+  background-color: #f4f6fc;
+  /* padding :3px */
 }
 .content {
   flex: 1;  
@@ -32,6 +93,19 @@ height: 100vh;
 }
 .App-link {
   color: #61dafb;
+}
+
+.bg-login-container{
+  background-color: #aedada;
+}
+table-border {
+  /* border-color: inherit; */
+  border-style: none;
+  width:80%;
+  /* border-width: 0; */
+}
+td-width{
+  width:-200px;
 }
 
 .loader-backdrop {

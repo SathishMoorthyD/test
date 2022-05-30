@@ -2,7 +2,8 @@ import axios from 'axios'
 import {Subject} from 'rxjs'
 import {showToasterSubject} from './toastr/toaster.service'
 
-const apiUrl = '//localhost:8080/'
+const apiUrl = process.env.REACT_APP_URL_BASE_API
+//const apiUrl="//localhost:3002/"
 console.log(apiUrl,"apiUrl")
 let showLoaderCount = 0;
 const showLoaderCounterSubject = new Subject()
@@ -42,6 +43,7 @@ axios.interceptors.request.use(function (response){
 export const apiGet=(url)=>axios({
     method:'get',
     url:apiUrl + url
+   
 })
 export const apiPost=(url,data)=>axios({
     method:'post',

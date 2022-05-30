@@ -6,6 +6,7 @@ import { showLoaderCountState } from './services/api.service.js'
 import { toast,ToastContainer } from 'react-toastify';
 import Header from './containers/header/header.js'
 import { Loader } from './containers/loader/loader.container';
+import { Login } from './containers/login/login.container';
 function App() {
   const [showLoader, setShowLoader] = useState(0),
   [isReadyToLoad,setIsReadyToLoad] = useState(false)
@@ -28,13 +29,15 @@ toast.error(toaster.value)
   }, [])
   
   return (
-    <div className="App">
+    <div  backgroundColor="grey">
      {/* <Loader  isOpen={showLoader}></Loader > */}
      <ToastContainer />
       {isReadyToLoad && <div className="app-header">
        <div className="body">
          <div className='content'>
        {/* <AppRouter></AppRouter> */}
+       {/* {(!localStorage.getItem('AccessToken') && <Login></Login>) || ( <Header />)} */}
+       {/* <Login /> */}
        <Header />
        </div>
        </div>

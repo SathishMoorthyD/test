@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
+
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,6 +17,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+import HomeIcon from '@mui/icons-material/Home';
+import CreditScoreIcon from '@mui/icons-material/CreditScore';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import SettingsIcon from '@mui/icons-material/Settings';
 import MailIcon from '@mui/icons-material/Mail';
 import {AppRouter } from '../../app-router.js'
 //import { Link, useLocation } from 'react-router-dom';
@@ -79,16 +85,22 @@ export default function Header() {
     setOpen(false);
   };
 const routerpath =[
-    { title:'CPP',icon:<InboxIcon /> ,path:'/cpp'}
+  { title:'Home',icon:<HomeIcon /> ,path:'/dashboard'},  
+  { title:'CPP',icon:<InboxIcon /> ,path:'/cpp'},
+
+    { title:'MenuB',icon:<CreditScoreIcon /> ,path:'/MenuB'},
+    { title:'MenuC',icon:<InsertDriveFileIcon /> ,path:'/MenuC'},
+    { title:'MenuD',icon:<RateReviewIcon /> ,path:'/MenuD'},
+    { title:'MenuE',icon:<SettingsIcon /> ,path:'/MenuE'}
 ]
 const handleRouter=(path)=>{
-   // location.href('/cpp')
+   // location.href('/cpp')s
 console.log(path,"path")
 }
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" style={{ background: '#f3f3f3' ,color:'black'}} open={open}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -100,7 +112,7 @@ console.log(path,"path")
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            IKYAM APPROVAL SOFTWARE
+            {/* IKYAM APPROVAL SOFTWARE */}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -110,7 +122,9 @@ console.log(path,"path")
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerWidth,
-            boxSizing: 'border-box',
+            // boxSizing: 'border-box',
+            backgroundColor:'#f0f7f7',
+            fontSize:'10spx'
           },
         }}
         variant="persistent"

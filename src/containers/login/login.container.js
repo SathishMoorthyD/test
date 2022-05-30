@@ -1,15 +1,16 @@
 import React,{useState} from 'react'
-import {Card,CardContent,Button,Grid,TextField,IconButton,Typography} from '@mui/material';
+import {Card,CardContent,Button,Grid,TextField,IconButton,Typography, Hidden} from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Form } from 'react-bootstrap'
+import '../../App.css';
 import { login } from '../../services/login/login.service';
 import { showToasterSubject } from '../../services/toastr/toaster.service';
-
+import {useNavigate} from 'react-router-dom'
 
 export const Login = () => {
-
+  let navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false)
   const [values, setValues] = useState({
     username: '',
@@ -29,29 +30,31 @@ export const Login = () => {
   };
   const handleSubmit=async (event )=>{
     event.preventDefault();
-    console.log(values)
-     await login(values)
+    // const response =  await login(values)
+    // localStorage.setItem('AccessToken',response.data)
+    // showToasterSubject.next({type:'success',value:'login successfully'})
+    navigate('/dashboard')
     
-    showToasterSubject.next({type:'success',value:'login successfully'})
-   //history.push('/cpp')
   }
   return (
-    <div style={{display:'flex',justifyContent:'center',height:100,marginTop:250,}}>
+    <div class="mx-md-n5  bg-login-container" style={{height:900,marginTop:-290,width:1500}}>
+      <br></br><br></br><br></br><br></br><br></br>
+    <div style={{justifyContent:'center',height:100,marginTop:250,width:250,marginLeft:500}}>
       <div className='text-center align-self-center'>
         <Form >
-       <Card >
+       <Card style={{borderRadius: 8, overflow: Hidden}}>
        <Typography variant="h6" gutterBottom component="div" style={{padding:10}}>
         Ikyam
       </Typography>
-      <CardContent style={{background:'#bbc4c2'}}>
+      <CardContent style={{background:'#f0f7f7'}}>
      
       
       <Grid container spacing={2}>
 
       <Grid item xs={12}>
       <TextField
-         placeholder='Enter the UserName'
-          id="outlined-size-small"
+         placeholder='User Name'
+          // id="outlined-size-small"
           onChange={(e)=>handleChange(e.target.value,'username')}
           size="small"
           value={values?.username}
@@ -60,10 +63,10 @@ export const Login = () => {
 </Grid>
 <Grid item xs={12}>
 <TextField
-           placeholder='Enter the Password'
-         id="outlined-size-small"
+           placeholder='Password'
+        //  id="outlined-size-small"
          fullWidth
-         size="small"
+         size="small"         
          value={values?.password}
          onChange={(e)=>handleChange(e.target.value,'password')}
          type={showPassword ? 'text' : 'password'}
@@ -73,7 +76,7 @@ export const Login = () => {
             aria-label="toggle password visibility"
             onClick={handleClickShowPassword}
             onMouseDown={handleMouseDownPassword}
-            edge="end"
+            // edge="end"
           >
             {showPassword ? <Visibility /> : <VisibilityOff /> }
           </IconButton>
@@ -93,5 +96,6 @@ export const Login = () => {
     </Form>
     </div>
     </div>
+  </div>
   )
 }

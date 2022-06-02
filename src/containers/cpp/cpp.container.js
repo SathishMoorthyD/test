@@ -11,11 +11,12 @@ import 'mdbreact/dist/css/mdb.css';
 import {TextField,MenuItem,Select} from '@mui/material';
 import { properties } from '../../components/MenuBLabelProperties';
 import { useLocation } from "react-router-dom";
-
-
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
   export default function CPP(){
     // let navigate = useNavigate();
-  const [role] =useState('Technician')
+  const [role] =useState(localStorage.getItem('Role'))
   const search = useLocation().search;
       // const name = new URLSearchParams(search).get('name');
       
@@ -23,11 +24,11 @@ import { useLocation } from "react-router-dom";
   let [data1, setData1] = useState([])
   let [values, setValues] = useState({
     records: [],
-    role:'technician',
+    role:localStorage.getItem('Role'),
     shift:'',
     section:'',
     userId:'',
-    date:'',
+    date:null,
     line:'',
     bool:true,
     field_1:'',
@@ -132,17 +133,11 @@ import { useLocation } from "react-router-dom";
   
   const handleSubmit= (e) => {
     e.preventDefault();
-    console.log("submit");
+    console.log("submit",values);
     console.log("field1",values.field_1)
 
-      const headers = { 
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-          'role':role,
-          "Access-Control-Allow-Methods": "POST, PUT, GET",
-          'Access-Control-Allow-Headers':"Origin, X-Requested-With, Content-Type, Accept"
-      };
-      axios.post('http://localhost:3002/MenuB', JSON.stringify(values), { headers })
+    
+      axios.post('http://localhost:3002/MenuB', JSON.stringify(values))
           .then(response => this.setState({ field_1: values.field_1 }));
   
   }
@@ -161,8 +156,17 @@ import { useLocation } from "react-router-dom";
              <div class="row gx-5">
                 <div class="col-6" >                   
                     <div class="p-1">
-                    <TextField id={properties.date} value={values.date}  label= {properties.date} inputProps={{ readOnly: false, }} size="small"  fullWidth onChange={(e)=> handleChange(e.target.value,'date')} />
-                     
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+  <DatePicker
+      value={values.date} 
+       label= {properties.date}
+    onChange={(newValue) => {
+      handleChange(newValue,'date')}
+    }
+    renderInput={(params) => <TextField {...params} />}
+  />
+</LocalizationProvider>
+                    
                     </div>
                     <div class="p-1">
                       <select label={properties.line} class="w-100 form-control form-control-sm rounded" inputProps={{ readOnly: false, }}  onChange={(e)=>handleChange(e.target.value,'line')} >
@@ -334,7 +338,7 @@ import { useLocation } from "react-router-dom";
       <div class=" card-body">
            <div class="row text-right">
             <div class="col-md-12  text-right">
-                 {role=="Manager" && 
+                 {role ==="Manager" && 
                     <>
                      <button type="button" class="btn btn-primary rounded btn-sm ">Approved</button>
                 <button type="button" class="btn btn-danger rounded btn-sm ml-2">Reject</button>               

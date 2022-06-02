@@ -1,4 +1,4 @@
-import Rseact from 'react'
+import React from 'react'
 import {
   BrowserRouter,
   Routes,
@@ -11,10 +11,8 @@ import  MenuDComponent from './containers/MenuD/MenuD.container.js';
 import  MenuEComponent from './containers/MenuE/MenuE.container.js';
 import  DashboardComponent from './containers/dashboard/dashboard.container.jsx';
 import { Login } from './containers/login/login.container.js';
-import { PaperCompnent } from './containers/paper/paper.component.js';
-import { PaperContainer } from './containers/paper/paper.container.js';
-import { PulpCompnent } from './containers/pulp/pulp.component.js';
-import { PulpContainer } from './containers/pulp/Pulp.container.js';
+import { UserMaster } from './containers/user-master/user-master.container.js';
+
 
 export const AppRouter = () => <BrowserRouter>
 <Routes>
@@ -27,6 +25,6 @@ export const AppRouter = () => <BrowserRouter>
   <Route path="/MenuD" element={<MenuDComponent />} />
   <Route path="/MenuE" element={<MenuEComponent />} />
   <Route path="/dashboard" element={<DashboardComponent />} />
-  
+  <Route path="/UserMaster" element={<UserMaster />} />
 </Routes>
 </BrowserRouter>

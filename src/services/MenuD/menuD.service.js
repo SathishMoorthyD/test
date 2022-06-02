@@ -11,11 +11,46 @@ export const fetchAllPaper =async()=> {
         return data1;
 }
 
-export const savePaper =async(data)=> data?.Id && await apiPost('api/jrmaster/add-jrmaster',data) || await apiPost('api/jrmaster/add-jrmaster',data)
+export const savePaper =async(data)=>{
+
+    if(data.paperid==null || data.jrmasterid==undefined){
+        console.log ("menuD apiPost");
+        let menuDData=[]; 
+        await apiPost('MenuD',data)
+        .then(response => {
+            menuDData=response.data;
+            console.log("menuD response", menuDData)
+        })
+        return menuDData;
+    }
+    else{
+        let menuDData=[]; 
+        await apiPut('MenuD',data)
+        .then(response => {
+            menuDData=response.data;
+            console.log("menuD response", menuDData)
+        })
+        return menuDData;
+    }
+
+}
+
+// export const savePaper =async(data)=> data?.Id && await apiPost('api/jrmaster/add-jrmaster',data) || await apiPost('api/jrmaster/add-jrmaster',data)
 
 // export const updateMenuB =async(data)=> data?.Id && await apiPut('api/finishing/add-finishing',data) || await apiPost('api/finishing/add-finishing',data)
 
-export const fetchPaperByPaperId =async(id)=> await apiGet(`api/paper/get-paper/${id}`)
+export const fetchPaperByPaperId =async(id)=> {
+    // await apiGet(`api/paper/get-paper/${id}`)
+    let data1=[];
+    await apiGet('MenuD')
+    // await apiGet('MenuD/'+id)
+    // await apiGet(`api/paper/get-paper/${id}`)
+    .then(response => {
+        data1=response.data;
+        console.log("response ", data1)
+    })
+    return data1;
+}
 
 export const fetchPaperByUser =async(id)=> await apiGet(`get-all-paper-by-user/${id}`)
 

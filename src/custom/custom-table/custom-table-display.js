@@ -48,7 +48,7 @@ super(props);
                <td class="p-1 col-3" style={{fontSize: ".8rem"}}><span className=''>{this.props.records.menu_name}</span></td>               
                <td class="p-1 col-3" style={{fontSize: ".8rem"}}><span>{this.props.records.shift}</span></td>
                <td class="p-1 col-3" style={{fontSize: ".8rem"}}><span>{this.props.records.line}</span></td>             
-               <td class="p-1 col-2" style={{fontSize: ".8rem"}}><span class={classStatus}>{this.props.records.approval_status}</span></td>           
+               <td class="p-1 col-2" style={{fontSize: ".9rem"}}><span class={classStatus}>{this.props.records.approval_status}</span></td>           
                <td class="p-1 col-1" style={{fontSize: ".8rem"}}><button class="btn btn-link btn-sm fonticon m-0"  onClick={this.handleSubmit}  > <i><ArrowCircleRightOutlinedIcon onclick={this.handleSubmit}/></i> </button></td>
               </tr>
             

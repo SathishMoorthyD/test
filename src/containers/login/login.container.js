@@ -30,9 +30,11 @@ export const Login = () => {
   };
   const handleSubmit=async (event )=>{
     event.preventDefault();
-    // const response =  await login(values)
-    // localStorage.setItem('AccessToken',response.data)
-    // showToasterSubject.next({type:'success',value:'login successfully'})
+    const response =  await login(values)
+    localStorage.setItem('AccessToken',response.data.token)
+    localStorage.setItem('Role',response.data.role)
+    localStorage.setItem('userId',((response.data.userid || response.data.userid !== undefined)?response.data.userid:values.username));
+    showToasterSubject.next({type:'success',value:'login successfully'})
     navigate('/dashboard')
     
   }

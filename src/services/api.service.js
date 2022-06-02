@@ -13,7 +13,7 @@ axios.interceptors.request.use(function (config){
     showLoaderCount++;
     showLoaderCounterSubject.next(showLoaderCount)
     config.headers.Accept= 'application/json';
-
+    config.headers.Role=localStorage.getItem('Role');
     return config;
 },function (error){
     showLoaderCount--;

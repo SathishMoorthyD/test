@@ -11,11 +11,44 @@ export const fetchAllJrmaster =async()=> {
         return data1;
 }
 
-export const saveJrmaster =async(data)=> data?.Id && await apiPost('api/jrmaster/add-jrmaster',data) || await apiPut('api/jrmaster/update-jrmaster',data)
+export const saveJrmaster =async(data)=> {
+    // data?.Id && await apiPost('api/jrmaster/add-jrmaster',data) || await apiPut('api/jrmaster/update-jrmaster',data)
+    if(data.jrmasterid==null || data.jrmasterid==undefined){
+        console.log ("menuc apiPost");
+        let menucData=[]; 
+        await apiPost('MenuC',data)
+        .then(response => {
+            menucData=response.data;
+            console.log(menucData)
+        })
+        return menucData;
+    }
+    else{
+        let menucData=[]; 
+        await apiPut('MenuC',data)
+        .then(response => {
+            menucData=response.data;
+            console.log("menuc response", menucData)
+        })
+        return menucData;
+    }
+}
 
 // export const updateMenuB =async(data)=> data?.Id && await apiPut('api/finishing/add-finishing',data) || await apiPost('api/finishing/add-finishing',data)
 
-export const fetchJrmasterById =async(id)=> await apiGet(`api/jrmaster/get-jrmaster/${id}`)
+export const fetchJrmasterById =async(id)=> {
+    let data1=[];
+    // await apiGet('MenuC/'+id)
+    await apiGet('MenuC')
+    // await apiGet(`api/jrmaster/get-jrmaster/${id}`)
+    .then(response => {
+        data1=response.data;
+        console.log("response ", data1)
+    })
+    return data1;
+}
+
+// export const fetchJrmasterById =async(id)=> await apiGet(`api/jrmaster/get-jrmaster/${id}`)
 
 export const fetchJrmasterByUser =async(id)=> await apiGet(`api/jrmaster/get-all-jrmaster-by-user/${id}`)
 

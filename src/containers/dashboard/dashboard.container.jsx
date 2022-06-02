@@ -14,7 +14,7 @@ import 'mdbreact/dist/css/mdb.css';
 import SearchIcon from '@mui/icons-material/Search';
 import { MDBTable, MDBTableBody, MDBTableHead } from 'mdbreact';
 import { dashboardProperties } from '../../components/dashboardLabel';
-import { fetchAllData } from '../../services/dashboard/dashboard.service';
+import { fetchAllData, getDashByDate } from '../../services/dashboard/dashboard.service';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -40,6 +40,7 @@ export default function DashboardComponent(){
   let [dateValue, setDateValue] = useState(new Date())
   let [records, setRecords] = useState([])
   let [records1, setRecords1] = useState([])
+  let [prevRecords, setPrevRecords] = useState([])
   let [values, setValues] = useState({
     records: [],
     records1: [],    
@@ -50,6 +51,11 @@ export default function DashboardComponent(){
     enddate:'',
     line:'',  
   });
+  let reqDashboard = {userId: '', date: ''};
+  //let appliedFilter = {line: '', shift: ''};
+  let [line, setLine] = useState('Line'); 
+  let [shift, setShift] = useState('Shift'); 
+
   const handleChange = (event,field) => {
     setValues({ ...values, [field]: event });
   };
@@ -61,91 +67,161 @@ export default function DashboardComponent(){
       horizontal: "left"
     }
   }
-  const  handleDateRangeChange= (event) => {
-          console.log("date"+event.target.value);
+  // const  handleDateRangeChange= (event) => {
+  //         console.log("date"+event.target.value);
     
-          // var date=new Date(event.target.value)
-          var date=event.target.value
-          console.log("End date"+date);
-        // this.setState({daterange:event.target.value});
-        setRecords1([])
-        let arr=[];
-      for(var j=0;j<records.length;j++){
-              console.log("cccc",  records[j].date.split(" ")[0]);
-              var temp=records[j].date.split(" ")[0].trim()
-              var temp1=temp.split("-");
-          // var checkDate=new Date(temp1[2], temp1[1],temp1[0]);           
-          // console.log("checkdate",checkDate)  
-          // console.log(checkDate.getTime() ," ",date.getTime())       ;
-          var checkDate=temp1[2]+"-"+temp1[1]+"-"+temp1[0]
-          if (checkDate == date) {            
-            console.log('date is between the 2 dates' +checkDate);
-            arr.push(records[j]);
-            }
-          } console.log("records1 ",arr)
-          setRecords1(arr);
-      }
+  //         // var date=new Date(event.target.value)
+  //         var date=event.target.value
+  //         console.log("End date"+date);
+  //       // this.setState({daterange:event.target.value});
+  //       setRecords1([])
+  //       let arr=[];
+  //     for(var j=0;j<records.length;j++){
+  //             console.log("cccc",  records[j].date.split(" ")[0]);
+  //             var temp=records[j].date.split(" ")[0].trim()
+  //             var temp1=temp.split("-");
+  //         // var checkDate=new Date(temp1[2], temp1[1],temp1[0]);           
+  //         // console.log("checkdate",checkDate)  
+  //         // console.log(checkDate.getTime() ," ",date.getTime())       ;
+  //         var checkDate=temp1[2]+"-"+temp1[1]+"-"+temp1[0]
+  //         if (checkDate == date) {            
+  //           console.log('date is between the 2 dates' +checkDate);
+  //           arr.push(records[j]);
+  //           }
+  //         } console.log("records1 ",arr)
+  //         setRecords1(arr);
+  //     }
         
       const  handleDateChange= (inDateValue) => {
-        console.log("date"+inDateValue);
-  
-        // var date=new Date(event.target.value)
         setDateValue(new Date(inDateValue))
-        console.log("End date"+dateValue);
-      // this.setState({daterange:event.target.value});
-      
+        
+        //Refresh dataset on date change
+        getData();
+      }
+
+      const handleLineChange= (event) => {
+        setLine(event.target.value);
     }
 
-   const handleLineChange= (event) => {
-      console.log("date"+event.target.value);
+  //  const handleLineChange1= (event) => {
+  //     setLine(event.target.value);
+  //     console.log("date" + line);
      
-     let arr=[];
-    setRecords1([])
-    if (event.target.value==="Select")
+  //     let arr=[];
+  //     //setRecords1([])
+  //     if (event.target.value==="Select")
+  //     { setRecords1((records1.length > 0)?records1: records);}
+  //     else{
+  //           // for(var i=0;i<records.length;i++){
+  //           //   console.log(records[i].line)
+  //           //   if(records[i].line==event.target.value){
+  //           //     arr.push(records[i]);
+  //           //   }
+  //           // }
+  //           // setRecords1(arr);
+  //           appliedFilter.line = line;
+  //           appliedFilter.shift = shift;
+  //           setRecords1(filteredDataByLine(records, appliedFilter));
+  //           }
+  // }
 
-    { setRecords1(records)}
-    else{
-          for(var i=0;i<records.length;i++){
-            console.log(records[i].line)
-            if(records[i].line==event.target.value){
-              arr.push(records[i]);
-            }
-          }
-          setRecords1(arr);     
-        }
+  const filterDataByLine = (dataList) =>
+  {
+    console.log(line);
+    if (line === 'Line' || line === 'Select')
+      return dataList;
+    else
+    {
+      const filteredRecords = dataList.filter(
+      (record) => (record.line === line)
+      );
+      console.log(filteredRecords);
+      return filteredRecords;
+    }
   }
 
- const handleShiftChange= (event) => {
-    console.log("date"+event.target.value);
-   let arr=[]  
-  setRecords1([])
-  if (event.target.value==="Select")
+  const filterDataByShift = (dataList) =>
+  {
+    console.log(shift);
+    if (shift === 'Shift' || shift === 'Select')
+      return dataList;
+    else
+    {
+      const filteredRecords = dataList.filter(
+      (record) => (record.shift === shift)
+      );
+      console.log(filteredRecords);
+      return filteredRecords;
+    }
+  }
 
-    { setRecords1(records)}
-    else{
-        for(var i=0;i<records.length;i++){
-          
-          if(records[i].shift==event.target.value){
-            console.log("Inside for",records[i].shift)
-            arr.push(records[i]);
-          }
-        }
-        setRecords1(arr);
-      }
-   
-}
-      
+  // const filteredDataByLine = (dataList, inFilter) => {
+  //   console.log(inFilter);
+  //   const filteredRecords = dataList.filter(
+  //   (record) => ((inFilter.shift !== 'Shift' && record.shift === inFilter.shift && record.line === inFilter.line) 
+  //               || (inFilter.shift === 'Shift' && record.line === inFilter.line))
+  //   );
+  //   console.log(filteredRecords);
+  //   return filteredRecords;};
   
-useEffect(() => { 
-    const data1 =  fetchAllData();    
-    data1.then(function(val) {
-      // console.log("val",val);
-      setRecords(val)      
-      setRecords1(val)      
-  });
-  // console.log("records",records)
-}, [])
+  // const filteredDataByShift = (dataList, inFilter) => {
+  //   console.log(inFilter);
+  //   const filteredRecords = dataList.filter(
+  //   (record) => ((inFilter.line !== 'Line' && record.shift === inFilter.shift && record.line === inFilter.line) 
+  //                 || (inFilter.line === 'Line' && record.shift === inFilter.shift))
+  //   );
+  //   console.log(filteredRecords);
+  //   return filteredRecords;};
+    
+    const handleShiftChange= (event) => {
+      setShift(event.target.value);
+    }
 
+//   const handleShiftChange1= (event) => {
+//     setShift(event.target.value);
+//     console.log("handleShiftChange "+ {shift});
+//     // let arr=[]  
+//     // setRecords1([])
+//     if (event.target.value==="Select")
+//     { setRecords1((records1.length > 0)?records1: records);}
+//     else{
+//         // for(var i=0;i<records.length;i++){
+          
+//         //   if(records[i].shift==event.target.value){
+//         //     console.log("Inside for",records[i].shift)
+//         //     arr.push(records[i]);
+//         //   }
+//         // }
+//         // setRecords1(arr);
+//         appliedFilter.line = {line};
+//         appliedFilter.shift = {shift};
+//         setRecords1(filteredDataByShift(records, appliedFilter));
+//       }
+// }
+  
+useEffect(() => {
+  if (line === 'Line' && shift === 'Shift') 
+    getData();
+
+  setRecords1(filterDataByShift(filterDataByLine(records)));
+}, [line, shift])
+
+const getData = () => {
+  reqDashboard.userId = localStorage.getItem("userId");
+  reqDashboard.date = moment(dateValue).format('DD-MM-YYYY');
+  console.log("Dashboard getData: reqDashboard date value is " + reqDashboard.date);
+
+  //const data1 =  fetchAllData();
+  setRecords([]);
+  setRecords1([]);    
+  const data1 =  getDashByDate(reqDashboard);    
+  data1.then(function(val) {
+    // console.log("val",val);
+    setRecords(val)      
+    setRecords1(val)      
+});
+// console.log("records",records)
+}
  
   return (
     <div style={{marginTop:20}}>
@@ -155,8 +231,7 @@ useEffect(() => {
           <div class="col-5">
           <span class="fw-bold"><h2>Dashboard</h2></span>
           </div>
-            
-              <div class="col-2" > 
+            <div class="col-2" > 
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DesktopDatePicker
                       label="Date"
@@ -166,9 +241,25 @@ useEffect(() => {
                     />
                   </LocalizationProvider>
               </div>
-            <div class="col-2 m-2" > 
-                    <FormControl fullWidth variant='standard'>
-                      <Select
+            <div class="col-2" > 
+                    <FormControl fullWidth>
+                    <TextField
+                      variant='filled'
+                      select
+                      id="simple-select"
+                      label="Line"
+                      displayEmpty
+                      renderValue={(value) => (value !== undefined ? value : 'Line')}
+                      sx={{ maxHeight:30,borderRadius: '16px', textAlign:"center"}}
+                      onChange={handleLineChange}
+                      // size="small" 
+                        >
+                      <MenuItem key={"Select"} value={"Select"}>Select</MenuItem>
+                      <MenuItem key={dashboardProperties.lineA} value={dashboardProperties.lineA}>{dashboardProperties.lineA}</MenuItem>
+                      <MenuItem key={dashboardProperties.lineB} value={dashboardProperties.lineB}>{dashboardProperties.lineB}</MenuItem>
+                      <MenuItem key={dashboardProperties.lineC} value={dashboardProperties.lineC}>{dashboardProperties.lineC}</MenuItem>
+                    </TextField>
+                      {/* <Select
                       labelId="simple-select-label"
                       id="simple-select"
                       label="Line"
@@ -178,25 +269,33 @@ useEffect(() => {
                       onChange={handleLineChange}
                       // size="small" 
                         >
+                      <MenuItem value={"Select"}>Select</MenuItem>
                       <MenuItem value={dashboardProperties.lineA}>{dashboardProperties.lineA}</MenuItem>
                       <MenuItem value={dashboardProperties.lineB}>{dashboardProperties.lineB}</MenuItem>
                       <MenuItem value={dashboardProperties.lineC}>{dashboardProperties.lineC}</MenuItem>
-                    </Select>     
+                    </Select>      */}
                 </FormControl>
-                  {/* <div class="fontline"><select class='w-75 form-control form-control-sm fw-bold rounded-pill bg-light'  placeholder="Line"   onChange={handleLineChange} >
-                <option value='Select'>Select Line</option>
-                  <option value={dashboardProperties.lineA}>{dashboardProperties.lineA}</option>
-                  <option value={dashboardProperties.lineB}>{dashboardProperties.lineB}</option>
-                  <option value={dashboardProperties.lineC}>{dashboardProperties.lineC}</option>
-                  <option value={dashboardProperties.lineD}>{dashboardProperties.lineD}</option>
-                  <option value={dashboardProperties.lineE}>{dashboardProperties.lineE}</option>
-                  </select> 
-                    <i class="fa fa-chevron-circle-down"></i> </div> */}
-              </div> 
-            <div class="col-2 m-2" >                   
+                </div> 
+            <div class="col-2" >                   
             <div class="fontline">
-            <FormControl fullWidth variant='standard'>                      
-                      <Select 
+            <FormControl fullWidth>                      
+                    <TextField 
+                      variant='filled'
+                      select
+                      id="select-shift"
+                      label="Shift"
+                      displayEmpty
+                      renderValue={(value) => (value !== undefined ? value : 'Shift')}
+                      sx={{ maxHeight:30,borderRadius: '16px', textAlign:"center"}}
+                      onChange={handleShiftChange}
+                      // size="small" 
+                        >
+                      <MenuItem key={"Select"} value={"Select"}>Select</MenuItem>    
+                      <MenuItem key={dashboardProperties.shift1} value={dashboardProperties.shift1}>{dashboardProperties.shift1}</MenuItem>
+                      <MenuItem key={dashboardProperties.shift2} value={dashboardProperties.shift2}>{dashboardProperties.shift2}</MenuItem>
+                      <MenuItem key={dashboardProperties.shift3} value={dashboardProperties.shift3}>{dashboardProperties.shift3}</MenuItem>
+                    </TextField>
+                      {/* <Select 
                       labelId="simple-select-shift"
                       id="select-shift"
                       value={dashboardProperties.shift}
@@ -210,20 +309,8 @@ useEffect(() => {
                       <MenuItem value={dashboardProperties.shift1}>{dashboardProperties.shift1}</MenuItem>
                       <MenuItem value={dashboardProperties.shift2}>{dashboardProperties.shift2}</MenuItem>
                       <MenuItem value={dashboardProperties.shift3}>{dashboardProperties.shift3}</MenuItem>
-                    </Select>                         
+                    </Select>                          */}
                 </FormControl>
-
-
-              {/* <select class='w-75 form-control form-control-sm fw-bold rounded-pill bg-light'  placeholder="Line"   onChange={handleShiftChange} >
-                <option value='Select'>Select Shift</option>
-                  <option value={dashboardProperties.shift1}>{dashboardProperties.shift1}</option>
-                  <option value={dashboardProperties.shift2}>{dashboardProperties.shift2}</option>
-                  <option value={dashboardProperties.shift3}>{dashboardProperties.shift3}</option>
-                  
-                  </select> 
-                    <i class="fa fa-chevron-circle-down"></i>  */}
-                  {/* <input type='text' class='w-75 form-control form-control-sm rounded-pill' placeholder="Search"  onChange={handleSectionChange}  > </input> */}
-                
                 </div>
             </div>
         </div> 
@@ -284,7 +371,3 @@ useEffect(() => {
   )
   }
 // }
-
-
-
-

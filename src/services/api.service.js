@@ -4,7 +4,6 @@ import {showToasterSubject} from './toastr/toaster.service'
 
 const apiUrl = process.env.REACT_APP_URL_BASE_API
 //const apiUrl="//localhost:3002/"
-console.log(apiUrl,"apiUrl")
 let showLoaderCount = 0;
 const showLoaderCounterSubject = new Subject()
 export const showLoaderCountState = showLoaderCounterSubject.asObservable()

@@ -67,26 +67,23 @@ export const CustomTable = (props ) => {
         
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-
-      
-                           
                 <div class="p-2"><TextField  value={values?.email} id={properties.email}   label={properties.email}  size="small"   fullWidth  onChange={(e)=>handleChange(e.target.value,'email')} />   </div>
                 <div class="p-2"> 
                 <Autocomplete
-        id={properties.role}
-        size="small"
-        options={roledata}
-        getOptionLabel={(option) => option.Role}
-        onChange={(event,newValue)=>handleChange(newValue.Role,'role')}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            
-            label={properties.role}
-           
+                id={properties.role}
+                size="small"
+                options={roledata}
+                getOptionLabel={(option) => option.roles}
+                onChange={(event,newValue)=>handleChange(newValue.roles,'roles')}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    
+                    label={properties.role}
+                  
+                  />
+            )}
           />
-        )}
-      />
                 </div>
                 <div class="p-2"><TextField value={values?.username} id={properties.username}   label={properties.username}  size="small"   fullWidth  onChange={(e)=>handleChange(e.target.value,'username')} />   </div>
                    

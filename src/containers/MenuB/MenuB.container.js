@@ -24,6 +24,7 @@ import { event } from 'jquery';
 import { enLocale } from 'date-fns/locale/en-IN';
 import { parse, format } from 'date-fns';
 import { now } from 'moment';
+import { trim } from 'lodash';
 
   export default function MenuBComponent(){
     let navigate = useNavigate();
@@ -31,7 +32,7 @@ import { now } from 'moment';
     
   const [role,setRole] =useState(localStorage.getItem('Role'))
   const search = useLocation().search;
-  
+  const [status,setStatus] =useState(localStorage.getItem(''))
   const [statusdisabled, setStatusDisabled] = useState(true)
   let [uiDate]=useState(new Date());
   let [data1, setData1] = useState()
@@ -43,7 +44,7 @@ import { now } from 'moment';
     username:'',
     finishingid:'',
     shift:'',    
-    userid:'',
+    userid:localStorage.getItem('UserId'),
     date: '',   
     comments:'',
     field_1:'',
@@ -82,6 +83,11 @@ import { now } from 'moment';
   const handleChange = (event,field) => {
     setValues(prevValues => ({...prevValues, [field]: event}));
   };
+
+  const handleFieldChange = async (stringVal,field) => {
+    setValues(prevValues => ({...prevValues, [field]: stringVal}));
+  };
+
   // const handleChange = (event,field) => {
   //   setValues({ ...values, [field]: event});
   // };
@@ -102,49 +108,26 @@ import { now } from 'moment';
 
   useEffect(() => {
 
-    console.log("useEffect.." + dateValue);
+    // console.log("useEffect.." + dateValue);
     const id = new URLSearchParams(search).get('menu_id');
-    console.log( "inside menu b user id",id );  
+    console.log( "inside menu b menu id",id );  
     const token = localStorage.getItem('AccessToken');
     if( localStorage.getItem('Role')!==undefined) setRole(localStorage.getItem('Role'))
     console.log("role", role)      
       
     if (token)  setToken(token);
-    // if (!dateValue)
     if(id  != null) {
-    // {
-
-
-      // if(id  != null) {
-
       // const data =  fetchAllFinishing();
-      const data=fetchFinishingById(id);
-      data.then(function (record) {setValues(record); setUIDate(record.date)});
-      // let data = [];
-      // data = fetchAllFinishing();
-      //setValues(values, {...data[0]});
-          //   data.then(function(val) {          
-          //         setTimeout(() => {
-          //           console.log("val",val);
-          //           // setData1(val) 
-          //           // console.log(data1)   
-          //           for(var i=0;i<val.length;i++){
-          //             if(val[i].finishingid==id){
-          //             setValues(val[i])       
-          //             }              
-          //           }       
-          //         }, 500);            
-          //  });
-
-          // var obj=document.getElementsByTagName("input");
-          // for(var i=0;i<obj.length;i++){
-          //   console.log("inside for")
-          //   obj[i].readOnly=true;
-          // }                
-      
+        const data=fetchFinishingById(id);
+        data.then(function (record) {
+          setValues(record); 
+          console.log("rrrr", record.field_29)
+          setStatus(record.field_29)
+          
+          setUIDate(record.date)});
+          console.log("status",status)
           setDisabled(true)
           setStatusDisabled(true)
-        // }
       }
       else {
         handleDateChange(new Date());
@@ -157,55 +140,13 @@ const setUIDate = (uiDateValue) =>
   setDateValue(moment(uiDateValue, "DD-MM-yyyy hh:mm:ss").toDate());
 };
 
-
-// useEffect(() => {
-//   const getData = () => {
-//   if(id  != null) {
-//     // const data =  fetchAllFinishing();/
-//     const data=fetchFinishingById(id);
-//     data.then(function (record) {
-//       setValues(record[2]); console.log("records" + record[2].date); console.log("values.date in " + values.date)});    
-//         //   data.then(function(val) {          
-//         //         setTimeout(() => {
-//         //           console.log("val",val);
-//         //           // setData1(val) 
-//         //           // console.log(data1)   
-//         //           for(var i=0;i<val.length;i++){
-//         //             if(val[i].finishingid==id){
-//         //             setValues(val[i])       
-//         //             }              
-//         //           }       
-//         //         }, 500);            
-//         //  });                   
-    
-//         setDisabled(true)
-//         setStatusDisabled(true)
-//       }
-//       console.log("Post timeout" + values?.date);
-//     }
-
-//     //moment.tz.setDefault('Asia/Kolkata');
-
-//     const id = new URLSearchParams(search).get('menu_id');
-//     console.log( "inside menu b user id",id );  
-//     const token = localStorage.getItem('AccessToken');
-//     if( localStorage.getItem('Role')!==undefined) setRole(localStorage.getItem('Role'))
-//     console.log("role", values.role, role)            
-//     if (token)  setToken(token);
-  
-//     getData();
-    
-//     console.log("Post timeout" + values?.field_11);
-// }, [])
-
-
  const handleEditSubmit= (e) => {
     e.preventDefault();
 
     console.log("eedit");
     setDisabled(false)   
     console.log("edit role",role)
-    if(role==="Manager") {console.log(role); setStatusDisabled(false);}
+    if(role==="approver") {console.log(role); setStatusDisabled(false);}
     else  {console.log(role); setStatusDisabled(true);};
  
   }
@@ -213,64 +154,83 @@ const setUIDate = (uiDateValue) =>
   const handleSubmit= (e) => {
     e.preventDefault();
   
-    // eslint-disable-next-line no-restricted-globals
-        if( confirm('Do you want to submit')){
-          console.log("comments",values.comments);
-          // if(values.comments !== undefined){
-          //   setData1("** Please fill the comments")
-          // }
-          // else
-          // {
-          //   console.log("field1",values.field_1)
-            alert ("values.date " + values.date);
-            console.log("Stringify",JSON.stringify(values)); 
-            const data =  saveFinishing(JSON.stringify(values),values.finishingid);    
-            data.then(()=>{    
-            console.log(data)
-            alert("Data submitted")
-            });
-            //navigate('/dashboard')
-          //}
-      }
-  }
+    let allowSubmit = "";
 
+    //eslint-disable-next-line no-restricted-globals
+    if( role !== "approver" && confirm('Do you want to submit')){
+      allowSubmit = "Go";
+    }
+    else if (role === "approver")
+    {
+      if(values.comments===undefined || values.comments===null || trim(values.comments).length === 0)
+      {
+        setData1("**Please fill the comments");
+        alert('Please fill in comments field')
+      }
+      else allowSubmit = "Go"; 
+    }
+
+    if(allowSubmit)
+    {
+      console.log("Stringify",JSON.stringify(values)); 
+      const data =  saveFinishing(JSON.stringify(values), values.finishingid);    
+      data.then(()=>{    
+        console.log(data)
+        alert("Data submitted successfully!");
+        navigate('/dashboard');
+      });
+    }
+  }
+  const handleBackSubmit= (e) => {
+    e.preventDefault();
+    navigate('/dashboard');
+  }
   const handleApproved= (e) => {
     e.preventDefault();
   
-     // eslint-disable-next-line no-restricted-globals
-        if( confirm('Do you want to Approve')){
-          console.log("comments",values.comments);
-          if(values.comments===undefined || values.comments===""){
-            setData1("** Please fill the comments")
-            alert('Please fill the comments field')
-          }
-          else{
-        console.log("field1",values.field_1)
-        const data =  saveFinishing(JSON.stringify(values),values.finishingid);    
-        data.then(()=>{    
-          console.log(data)
-          alert("Data Approved")
-          });
-      }
+     //eslint-disable-next-line no-restricted-globals
+      if(confirm('Do you want to Approve')){
+        console.log("comments",values.comments);
+        if(values.comments===undefined || values.comments===null || trim(values.comments).length === 0)
+        {
+          setData1("**Please fill the comments")
+          alert('Please fill the comments field')
+        }
+        else{
+          values.field_29=properties.approve;
+          setValues(prevValues => ({...prevValues, ['field_29']: properties.approve}));
+
+          console.log("field_29",values.field_29);
+          const data =  saveFinishing(JSON.stringify(values), values.finishingid);    
+          data.then(()=>{    
+            console.log(data)
+            alert("Data Approved: " + data);
+            });
+        }
     }
   }
   const handleRejected= (e) => {
     e.preventDefault();  
+    console.log("comments",values.comments);
+    // eslint-disable-next-line no-restricted-globals
+    if( confirm('Do you want to Reject')){
+      console.log("comments",values.comments);
+      if(values.comments===undefined || values.comments===null || trim(values.comments).length === 0)
+      {
+        setData1("**Please fill the comments");
+        alert('Please fill the comments field');
+      }
+      else{
+        values.field_29=properties.reject;
+        setValues(prevValues => ({...prevValues, ['field_29']: properties.reject}));
 
-  
-    console.log("comments",values.comments)
-     // eslint-disable-next-line no-restricted-globals
-      if( confirm('Do you want to Reject')){
-        console.log("comments",values.comments);
-        if(values.comments===undefined)alert('Please fill the comments field')
-        else{
-        console.log("field1",values.field_1)
-        const data =  saveFinishing(JSON.stringify(values),values.finishingid);    
+        console.log("field_29",values.field_29);
+        const data =  saveFinishing(JSON.stringify(values), values.finishingid);    
         data.then(function(val) {    
         console.log(val)
-        alert("Data Rejected")
-        });
-     }
+        alert("Data Rejected: " + data);
+        })
+      }
     }
   }
 
@@ -494,7 +454,8 @@ const setUIDate = (uiDateValue) =>
               
                 <div class="col-6">
                 <div class="p-2">
-                  {/* <TextField value={values?.field_29} id={properties.field_29}    label={properties.field_29}  size="small" disabled={statusdisabled} fullWidth  onChange={(e)=>handleChange(e.target.value,'field_29')} />    */}
+                  {/* <TextField value={values?.field_29} id={properties.field_29} label={properties.field_29}  size="small" disabled={true} fullWidth  onChange={(e)=>handleChange(e.target.value,'field_29')} />    */}
+                  {role ==="approver" &&
                   <TextField
                     fullWidth
                     variant='outlined'
@@ -506,15 +467,16 @@ const setUIDate = (uiDateValue) =>
                     value={values?.field_29} disabled={statusdisabled}  onChange={(e)=>handleChange(e.target.value,'field_29')}
                     size="small"
                     >
+                    <MenuItem key={properties.waiting} value={properties.waiting}>{properties.waiting}</MenuItem>
                     <MenuItem key={properties.approve} value={properties.approve}>{properties.approve}</MenuItem>
                     <MenuItem key={properties.reject} value={properties.reject}>{properties.reject}</MenuItem>
                   </TextField> 
+                  }
                   </div>
                 <div class="p-2"><textarea disabled={statusdisabled} value={values?.comments}  id={properties.comments} label={properties.comments} rows='3' cols='55'   fullWidth size="small"  required  onChange={(e)=>handleChange(e.target.value,'comments')} ></textarea> </div> 
                 {/* <div class="p-2"> <span class="text-danger">{data1}</span></div>                                         */}
                 </div>
                 <div class="col-6">                    
-                
                 </div>
               </div>
           </div>
@@ -526,15 +488,23 @@ const setUIDate = (uiDateValue) =>
       <div class=" card-body">
            <div class="row text-right">
             <div class="col-md-12  text-right">
-                               
+            {status !="Approved" &&
+                <>              
                 <button type="button" class="btn btn-success rounded btn-sm"  onClick={handleEditSubmit}>Edit</button>
                 <button type="button" class="btn btn-warning rounded btn-sm  ml-2" onClick={handleSubmit}>Submit</button>
-                {role ==="Manager" && 
-                    <>                   
-                <button type="button" class="btn btn-danger rounded btn-sm ml-2"  onClick={handleRejected}>Reject</button>               
+                </>
+            }
+            {status ==="Approved" &&
+                <>              
+                <button type="button" class="btn btn-success rounded btn-sm"  onClick={handleBackSubmit}>Back to Dashboard</button>            
+                </>
+            }
+                {/* {role ==="approver" && 
+                <>                   
+                <button type="button" class="btn btn-danger rounded btn-sm ml-2" onClick={handleRejected}>Reject</button>               
                 <button type="button" class="btn btn-primary rounded btn-sm " onClick={handleApproved}>Approved</button>
                 </>
-              }
+                } */}
             </div>        
             </div>
       </div>     
@@ -545,8 +515,3 @@ const setUIDate = (uiDateValue) =>
   
   )
  }
-
-
-
-
-

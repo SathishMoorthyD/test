@@ -9,8 +9,12 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Dialog,DialogActions,DialogContentText,DialogContent,DialogTitle } from '@mui/material';
+import { changePass, deleteUser } from '../../services/login/login.service';
+import { ThemeConsumer } from 'styled-components';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export  const OperationRender = (props) => {
+    let navigate = useNavigate();
     const {rowDetail} = props
     console.log(rowDetail)
     const [showPassword, setShowPassword] = useState(false)
@@ -47,13 +51,24 @@ export  const OperationRender = (props) => {
     const handleResetPasswordChange = (event,field) => {
       setResetPasswordValues({ ...resetPasswordValues, [field]: event });
     };
-    const handleResetPasswordSubmit=async (event )=>{
+    const handleResetPasswordSubmit=(event )=>{
       event.preventDefault();
       console.log(resetPasswordValues)
       //  await saveUserMaster(resetPasswordValues)
-      handleResetPasswordClose()
-      setResetPasswordValues()
       // showToasterSubject.next({type:'success',value:'User Master Added successfully'})
+
+      const responseData = changePass(resetPasswordValues);
+      //console.log("operation-render reset password ", responseData);
+      responseData.then(function(val){
+      //console.log("operation-render reset password then", val);
+      alert(val.data);
+      if (val.status === 200)
+      {
+        handleResetPasswordClose();
+        setResetPasswordValues();
+        //navigate("/UserMaster");
+      }
+      })
     }
     const [openDelete, setOpenDelete] = React.useState(false);
   
@@ -71,9 +86,19 @@ export  const OperationRender = (props) => {
       event.preventDefault()
       console.log( resetPasswordValues)
       //  await saveUserMaster(resetPasswordValues)
-      handleDeleteClose()
-      setResetPasswordValues()
+
+      const responseData = deleteUser(resetPasswordValues.id);
+      //console.log("operation-render delete user ", responseData);
+      responseData.then(function(val){
+      //console.log("operation-render delet user then", val);
+      alert(val.data);
+      if (val.status === 200)
+      {
+        handleDeleteClose()
+        setResetPasswordValues()
       // showToasterSubject.next({type:'success',value:'User Master Added successfully'})
+      }
+      })
     }
   return (
     <div>
@@ -125,10 +150,10 @@ export  const OperationRender = (props) => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
           <Typography variant="h6"  component="div" style={{padding:5}}>
-      UserName :  {resetPasswordValues?.userName}
+      UserName :  {resetPasswordValues?.username}
       </Typography>
       <Typography variant="h6"  component="div" style={{padding:5}}>
-      Email :  {resetPasswordValues?.Email}
+      Email :  {resetPasswordValues?.email}
       </Typography>
       <TextField
            placeholder='Password'
@@ -175,19 +200,19 @@ export  const OperationRender = (props) => {
           <Typography variant="caption"  component="div" style={{padding:2}}>
         
         After You Delete an Account,its permantenly Deleted.<br/>
-        Account Can't be Deleted
+        Account Can't be Undeleted
       </Typography>
       <Typography variant="h6"  component="div" style={{padding:5}}>
-      userName : {resetPasswordValues?.userName}
+      userName : {resetPasswordValues?.username}
       </Typography>
       <Typography variant="h6"  component="div" style={{padding:5}}>
-      Email :  {resetPasswordValues?.Email}
+      Email :  {resetPasswordValues?.email}
       </Typography>
       
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-        <button type="button" class="btn btn-warning rounded btn-sm  ml-2" onClick={handleDeleteSubmit}>Submit</button>
+        <button type="button" class="btn btn-danger rounded btn-sm  ml-2" onClick={handleDeleteSubmit}>Delete</button>
         </DialogActions>
       </Dialog>
     </div>

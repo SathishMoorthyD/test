@@ -19,19 +19,21 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateTimePicker, DesktopDatePicker, DesktopDateTimePicker } from '@mui/x-date-pickers';
 import moment from 'moment';
-
+import {useNavigate} from 'react-router-dom'
+import { trim } from 'lodash';
 export default function MenuEComponent(){
-
+  let navigate = useNavigate();
   const search = useLocation().search;
   const [disabled, setDisabled] = useState(false)
   const [role,setRole] =useState(localStorage.getItem('Role'))
   let [token, setToken] = useState('')
+  const [status,setStatus] = useState('');
   const [statusdisabled, setStatusDisabled] = useState(true)
   let [data1, setData1] = useState()
   const [dateValue, setDateValue] = useState(null);
   let [values, setValues] = useState({    
     comments:'',
-    userid:'',
+    userid:localStorage.getItem('UserId'),
     shift:'',   
     date:'',
     line:'',    
@@ -110,7 +112,10 @@ useEffect(() => {
      if(id  != null) {
     // const data =  fetchAllPulp();   
         const data= fetchPulpById(id); 
-        data.then(function (record) {setValues(record[0]); setUIDate(record[0].date)}); 
+        data.then(function (record) {setValues(record); setUIDate(record.date)
+          setStatus(record.field_50)
+        }); 
+        console.log("status",status)
         setDisabled(true)
         setStatusDisabled(true)
       }   
@@ -131,29 +136,47 @@ const handleDateChange = (dateValue) => {
   setValues(prevValues => ({...prevValues, ['date']:format(dateValue, "dd-MM-yyyy hh:mm:ss")}));
 }
 
+const handleBackSubmit= (e) => {
+  e.preventDefault();
+  navigate('/dashboard');
+}
+
  const handleEditSubmit= (e) => {
     e.preventDefault();
 
     console.log("eedit");
     setDisabled(false)   
-    if(role ==="Manager") setStatusDisabled(false)
+    if(role ==="approver") setStatusDisabled(false)
     else  setStatusDisabled(true)
   }
   
   const handleSubmit= (e) => {
     e.preventDefault();
   
-    // eslint-disable-next-line no-restricted-globals
-        if( confirm('Do you want to submit')){
+    let allowSubmit = "";
 
-          // console.log("comments",values.comments);
-          // if(values.comments==undefined){ setData1("** Please fill the comments")}
-          // else{
+    //eslint-disable-next-line no-restricted-globals
+    if( role !== "approver" && confirm('Do you want to submit')){
+      allowSubmit = "Go";
+    }
+    else if (role === "approver")
+    {
+      if(values.comments===undefined || values.comments===null || trim(values.comments).length === 0)
+      {
+        setData1("**Please fill the comments");
+        alert('Please fill in comments field')
+      }
+      else allowSubmit = "Go"; 
+    }
+
+    if(allowSubmit)
+    {
           console.log("stringify",JSON.stringify(values))
-          const data =  savePulp(JSON.stringify(values));    
+          const data =  savePulp(JSON.stringify(values), values.pulpid);    
           data.then(function(val) {    
           console.log(val)
-          alert("Data submited")
+          alert("Data submitted successfully!");
+          navigate('/dashboard');
           });
         // }
       }
@@ -249,9 +272,6 @@ const handleDateChange = (dateValue) => {
                             size="small"  >
                             <MenuItem key={properties.lineA} value={properties.lineA}>{properties.lineA}</MenuItem>
                             <MenuItem key={properties.lineB} value={properties.lineB}>{properties.lineB}</MenuItem>
-                            <MenuItem key={properties.lineC} value={properties.lineC}>{properties.lineC}</MenuItem>
-                            <MenuItem key={properties.lineD} value={properties.lineD}>{properties.lineD}</MenuItem>
-                            <MenuItem key={properties.lineE} value={properties.lineE}>{properties.lineE}</MenuItem>
                           </TextField>
                      </div>
                 
@@ -466,6 +486,7 @@ const handleDateChange = (dateValue) => {
                 <div class="col-6">
                 <div class="p-2">
                   {/* <TextField value={values?.field_50} id={properties.field_50}    label={properties.field_50}  size="small" disabled={statusdisabled} fullWidth  onChange={(e)=>handleChange(e.target.value,'field_50')} />    */}
+                  {role ==="approver" &&
                   <TextField
                     fullWidth
                     variant='outlined'
@@ -480,6 +501,7 @@ const handleDateChange = (dateValue) => {
                     <MenuItem key={properties.approve} value={properties.approve}>{properties.approve}</MenuItem>
                     <MenuItem key={properties.reject} value={properties.reject}>{properties.reject}</MenuItem>
                   </TextField>
+                  }
                 </div>
                 <div class="p-2"><textarea disabled={statusdisabled} value={values?.comments}  id={properties.comments} label={properties.comments} rows='3' cols='55'   fullWidth size="small"  required  onChange={(e)=>handleChange(e.target.value,'comments')} ></textarea> </div> 
                 {/* <div class="p-2"> <span class="text-danger">{data1}</span></div>                                         */}
@@ -497,16 +519,25 @@ const handleDateChange = (dateValue) => {
       <div class=" card-body">
            <div class="row text-right">
             <div class="col-md-12  text-right">
-                               
+            { status !="Approved" && 
+                 <>             
                 <button type="button" class="btn btn-success rounded btn-sm"  onClick={handleEditSubmit}>Edit</button>
                 <button type="button" class="btn btn-warning rounded btn-sm  ml-2" onClick={handleSubmit}>Submit</button>
-                {role ==="Manager" && 
+                </>
+                }
+                {status ==="Approved" &&
+                <>              
+                <button type="button" class="btn btn-success rounded btn-sm"  onClick={handleBackSubmit}>Back to Dashboard</button>            
+                </>
+                }
+              
+                {/* {role ==="approver" && 
                     <>
                    
                 <button type="button" class="btn btn-danger rounded btn-sm ml-2"  onClick={handleRejected}>Reject</button>               
                 <button type="button" class="btn btn-primary rounded btn-sm " onClick={handleApproved}>Approved</button>
                 </>
-              }
+              } */}
             </div>        
             </div>
       </div>     

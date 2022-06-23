@@ -54,19 +54,14 @@ export default function DashboardComponent(){
   let reqDashboard = {userid: '', date: ''};
   //let appliedFilter = {line: '', shift: ''};
   let [line, setLine] = useState('Line'); 
+  let [section, setSection] = useState('Section'); 
   let [shift, setShift] = useState('Shift'); 
 
   const handleChange = (event,field) => {
     setValues({ ...values, [field]: event });
   };
 
-  const menuProps = {
-    getContentAnchorEl: null,
-    anchorOrigin: {
-      vertical: "bottom",
-      horizontal: "left"
-    }
-  }
+  
   // const  handleDateRangeChange= (event) => {
   //         console.log("date"+event.target.value);
     
@@ -92,16 +87,20 @@ export default function DashboardComponent(){
   //         setRecords1(arr);
   //     }
         
-      const  handleDateChange= (inDateValue) => {
-        setDateValue(inDateValue)
+    const  handleDateChange= (inDateValue) => {
+        console.log("handleDateChange " + inDateValue);
+        setDateValue(inDateValue);
         
         //Refresh dataset on date change
         getData(inDateValue);
       }
 
-      const handleLineChange= (event) => {
-        setLine(event.target.value);
-    }
+    //   const handleLineChange= (event) => {
+    //     setLine(event.target.value);
+    // }
+    const handleSectionChange= (event) => {
+      setSection(event.target.value);
+  }
 
   //  const handleLineChange1= (event) => {
   //     setLine(event.target.value);
@@ -125,15 +124,30 @@ export default function DashboardComponent(){
   //           }
   // }
 
-  const filterDataByLine = (dataList) =>
+  // const filterDataByLine = (dataList) =>
+  // {
+  //   console.log(line);
+  //   if (line === 'Line' || line === 'Select')
+  //     return dataList;
+  //   else
+  //   {
+  //     const filteredRecords = dataList.filter(
+  //     (record) => (record.line === line)
+  //     );
+  //     console.log(filteredRecords);
+  //     return filteredRecords;
+  //   }
+  // }
+
+  const filterDataBySection = (dataList) =>
   {
-    console.log(line);
-    if (line === 'Line' || line === 'Select')
+    console.log(section);
+    if (section === 'Section' || section === 'Select')
       return dataList;
     else
     {
       const filteredRecords = dataList.filter(
-      (record) => (record.line === line)
+      (record) => (record.menu_name === section)
       );
       console.log(filteredRecords);
       return filteredRecords;
@@ -200,14 +214,14 @@ export default function DashboardComponent(){
 // }
   
 useEffect(() => {
-  if (line === 'Line' && shift === 'Shift') 
-  getData(dateValue);
+  if (section === 'Section' && shift === 'Shift') 
+    getData(dateValue);
 
-  setRecords1(filterDataByShift(filterDataByLine(records)));
-}, [line, shift])
+  setRecords1(filterDataByShift(filterDataBySection(records)));
+}, [section, shift])
 
 const getData = (dateValue) => {
-  reqDashboard.userid = localStorage.getItem("userId");
+  reqDashboard.userid = localStorage.getItem("UserId");
   reqDashboard.date = moment(dateValue).format('DD-MM-YYYY');
   console.log("Dashboard getData: reqDashboard date value is " + reqDashboard.date);
 
@@ -228,7 +242,7 @@ const getData = (dateValue) => {
   
   <div class="container">
         <div class="row justify-content-end">
-          <div class="col-5">
+          <div class="col-6">
           <span class="fw-bold"><h2>Dashboard</h2></span>
           </div>
             <div class="col-2" > 
@@ -250,23 +264,28 @@ const getData = (dateValue) => {
                       variant='filled'
                       select
                       id="simple-select"
-                      label="Line"
+                      label="Section"
                       displayEmpty
-                      renderValue={(value) => (value !== undefined ? value : 'Line')}
+                      renderValue={(value) => (value !== undefined ? value : 'Section')}
                       sx={{ maxHeight:30,borderRadius: '16px', textAlign:"center"}}
-                      onChange={handleLineChange}
+                      onChange={handleSectionChange}
                       // size="small" 
                         >
                       <MenuItem key={"Select"} value={"Select"}>Select</MenuItem>
-                      <MenuItem key={dashboardProperties.lineA} value={dashboardProperties.lineA}>{dashboardProperties.lineA}</MenuItem>
-                      <MenuItem key={dashboardProperties.lineB} value={dashboardProperties.lineB}>{dashboardProperties.lineB}</MenuItem>
-                      <MenuItem key={dashboardProperties.lineC} value={dashboardProperties.lineC}>{dashboardProperties.lineC}</MenuItem>
+                      <MenuItem key={dashboardProperties.menuA} value={dashboardProperties.menuA}>{dashboardProperties.menuA}</MenuItem>
+                      <MenuItem key={dashboardProperties.menuB} value={dashboardProperties.menuB}>{dashboardProperties.menuB}</MenuItem>
+                      <MenuItem key={dashboardProperties.menuC} value={dashboardProperties.menuC}>{dashboardProperties.menuC}</MenuItem>
+                      <MenuItem key={dashboardProperties.menuD} value={dashboardProperties.menuD}>{dashboardProperties.menuD}</MenuItem>
+                      {/* <MenuItem key={dashboardProperties.lineA} value={dashboardProperties.lineA}>{dashboardProperties.lineA}</MenuItem>
+                      <MenuItem key={dashboardProperties.lineB} value={dashboardProperties.lineB}>{dashboardProperties.lineB}</MenuItem> */}
                     </TextField>
+                      
                       {/* <Select
                       labelId="simple-select-label"
                       id="simple-select"
                       label="Line"
                       displayEmpty
+
                       renderValue={(value) => (value !== undefined ? value : 'Line')}
                       sx={{ maxHeight:30,borderRadius: '16px', textAlign:"center"}}
                       onChange={handleLineChange}

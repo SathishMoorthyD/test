@@ -1,10 +1,12 @@
 export const dashboardProperties = {
-    lineA: "LineA",
-    lineB: "LineB",
-    lineC:"LineC",
-    lineD:"LineD",
-    lineE: "LineE", 
-    shift1:"shift1",
-    shift2:"shift2",
-    shift3:"shift3"
+    lineA: "1",
+    lineB: "2", 
+    shift1:"A",
+    shift2:"B",
+    shift3:"C",
+    menuA:"MenuA",
+    menuB:"MenuB",
+    menuC:"MenuC",
+    menuD:"MenuD",
+    menuE:"MenuE"
 };

@@ -1,4 +1,5 @@
-import { apiDelete, apiGet, apiPost, apiPut } from "../api.service"
+import { trim } from "lodash";
+import { apiDelete, apiGet, apiPost, apiPut, MENUE_ADD, MENUE_GETBYID, MENUE_REVIEW } from "../api.service"
 
 
 export const fetchAllPulp =async()=> {
@@ -13,40 +14,39 @@ export const fetchAllPulp =async()=> {
 }
 
 
-export const savePulp =async(data)=>{
-    //  data?.Id &&) || 
-    if(data.pulpid==null || data.pulpid==undefined){
-        console.log ("menuE apiPost");
-        let menuEData=[]; 
-        // await apiPut('api/pulp/add-pulp',data)
-        await apiPost('menuE',data)
+export const savePulp =async(data, menuId)=>{
+
+    console.log("savePulp ", data);
+    if(menuId===null || menuId===undefined || trim(menuId).length ===0)
+    {
+        console.log ("menue apiPost");
+        let menueData=[]; 
+        await apiPost(MENUE_ADD,data)
         .then(response => {
-            menuEData=response.data;
-            console.log("menuE response", menuEData)
+            menueData=response.data;
+            console.log("menue response", menueData)
         })
-        return menuEData;
+        return menueData;
     }
     else{
-        let menuEData=[]; 
-        // await apiPut('api/paper/update-paper',data)
-        await apiPut('menuE',data)
+        console.log ("menue apiPut");
+        let menueData=[]; 
+        await apiPut(MENUE_REVIEW,data)
         .then(response => {
-            menuEData=response.data;
-            console.log("menuE response", menuEData)
+            menueData=response.data;
+            console.log("menue response", menueData)
         })
-        return menuEData;
+        return menueData; 
     }
 }
 
 export const fetchPulpById =async(id)=> {
-    
+    console.log("fetchPulpById: " + MENUE_GETBYID);
     let data1=[];
-    await apiGet('MenuE')
-    // await apiGet('MenuE/'+id)
-  // await apiGet(`api/pulp/get-pulp/${id}`)
+    await apiGet(MENUE_GETBYID + `/${id}`)
     .then(response => {
         data1=response.data;
-        console.log("response ", data1)
+        console.log("Get response ", data1)
     })
     return data1;
 }

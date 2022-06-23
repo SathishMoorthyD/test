@@ -4,7 +4,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import CPP  from './containers/cpp/cpp.container.js';
+import CPP  from './containers/MenuA/cpp.container.js';
 import  MenuBComponent from './containers/MenuB/MenuB.container.js';
 import  MenuCComponent from './containers/MenuC/MenuC.container.js';
 import  MenuDComponent from './containers/MenuD/MenuD.container.js';
@@ -17,7 +17,7 @@ import { UserMaster } from './containers/user-master/user-master.container.js';
 export const AppRouter = () => <BrowserRouter>
 <Routes>
   <Route path="/" element={<Login />} />
-  <Route path="/cpp" element={<CPP />} />
+  <Route path="/MenuA" element={<CPP />} />
   
   <Route path="/MenuB" element={<MenuBComponent />} />
   {/* <Route path="/menuB" element={<MenuBComponent />} /> */}

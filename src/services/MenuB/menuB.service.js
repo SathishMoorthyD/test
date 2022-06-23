@@ -1,5 +1,5 @@
-import { trim } from "lodash";
-import { apiDelete, apiGet, apiPost, apiPut } from "../api.service"
+import { times, trim } from "lodash";
+import { apiDelete, apiGet, apiPost, apiPut, MENUB_ADD, MENUB_GETBYID, MENUB_REVIEW } from "../api.service"
 
 export const fetchAllFinishing =async()=> {
     let data1=[];
@@ -13,38 +13,40 @@ export const fetchAllFinishing =async()=> {
 }
 
 //export const saveFinishing =async(data)=> data?.Id && await apiPost('api/finishing/add-finishing',data) || await apiPut('api/finishing/update-finishing',data)
-export const saveFinishing =async(data,menuId)=>   {
+export const saveFinishing =async(data, menuId)=>{
 
-    console.log("finishing id ", data.finishingid)
-    if(menuId===null || menuId===undefined || trim(menuId).length===0){
-            console.log ("menub apiPost");
-            let menubData=[]; 
-            await apiPost('MenuB',data)
-            .then(response => {
-                menubData=response.data;
-                console.log("menub response", menubData)
-            })
-            return menubData;
-        }
-        else{
-            console.log ("menub apiPut");
-            let menubData=[]; 
-            await apiPut('MenuB',data)
-            .then(response => {
-                menubData=response.data;
-                console.log("menub response", menubData)
-            })
-            return menubData; 
-        }
+    console.log("saveFinishing ", data);
+    if(menuId===null || menuId===undefined || trim(menuId).length ===0)
+    {
+        console.log ("menub apiPost");
+        let menubData=[]; 
+        await apiPost(MENUB_ADD,data)
+        .then(response => {
+            menubData=response.data;
+            console.log("menub response", menubData)
+        })
+        return menubData;
     }
+    else{
+        console.log ("menub apiPut");
+        let menubData=[]; 
+        await apiPut(MENUB_REVIEW,data)
+        .then(response => {
+            menubData=response.data;
+            console.log("menub response", menubData)
+        })
+        return menubData; 
+    }
+}
 
 // export const updateMenuB =async(data)=> data?.Id && await apiPut('api/finishing/add-finishing',data) || await apiPost('api/finishing/add-finishing',data)
 
 export const fetchFinishingById =async(id)=> {
+    console.log("fetchFinishingById: " + MENUB_GETBYID);
     let data1=[];
-        // await apiGet(`MenuB/${id}`)
-       // await apiGet('MenuB')
-         await apiGet(`api/finishing/get-finishing/${id}`)
+        await apiGet(MENUB_GETBYID + `/${id}`)
+        //await apiGet('MenuB')
+        // await apiGet(`api/finishing/get-finishing/${id}`)
         .then(response => {
             data1=response.data;
             console.log("Get response ", data1)

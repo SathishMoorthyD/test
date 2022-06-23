@@ -1,5 +1,5 @@
 import { trim } from "lodash";
-import { apiDelete, apiGet, apiPost, apiPut } from "../api.service"
+import { apiDelete, apiGet, apiPost, apiPut, MENUD_ADD, MENUD_GETBYID, MENUD_REVIEW } from "../api.service"
 
 export const fetchAllPaper =async()=> {
     let data1=[];
@@ -12,45 +12,41 @@ export const fetchAllPaper =async()=> {
         return data1;
 }
 
-export const savePaper =async(data,menuId)=>{
+export const savePaper = async(data, menuId)=>{
 
-    if(menuId===null || menuId===undefined || trim(menuId).length===0){
-        console.log ("menuD apiPost");
-        let menuDData=[]; 
-        await apiPost('api/paper/add-paper',data)
+    console.log("savePaper ", data);
+    if(menuId===null || menuId===undefined || trim(menuId).length ===0)
+    {
+        console.log ("menud apiPost");
+        let menudData=[]; 
+        await apiPost(MENUD_ADD,data)
         .then(response => {
-            menuDData=response.data;
-            console.log("menuD response", menuDData)
+            menudData=response.data;
+            console.log("menud response", menudData)
         })
-        return menuDData;
+        return menudData;
     }
     else{
-        let menuDData=[]; 
-        await apiPut('api/paper/update-paper',data)
+        console.log ("menud apiPut");
+        let menudData=[]; 
+        await apiPut(MENUD_REVIEW,data)
         .then(response => {
-            menuDData=response.data;
-            console.log("menuD response", menuDData)
+            menudData=response.data;
+            console.log("menud response", menudData)
         })
-        return menuDData;
+        return menudData; 
     }
-
 }
 
-// export const savePaper =async(data)=> data?.Id && await apiPost('api/jrmaster/add-jrmaster',data) || await apiPost('api/jrmaster/add-jrmaster',data)
-
-// export const updateMenuB =async(data)=> data?.Id && await apiPut('api/finishing/add-finishing',data) || await apiPost('api/finishing/add-finishing',data)
-
 export const fetchPaperByPaperId =async(id)=> {
-    // await apiGet(`api/paper/get-paper/${id}`)
+    console.log("fetchPaperByPaperId: " + MENUD_GETBYID);
     let data1=[];
-    //await apiGet('MenuD')
-    // await apiGet('MenuD/'+id)
-     await apiGet(`api/paper/get-paper/${id}`)
-    .then(response => {
-        data1=response.data;
-        console.log("response ", data1)
-    })
-    return data1;
+        await apiGet(MENUD_GETBYID + `/${id}`)
+        .then(response => {
+            data1=response.data;
+            console.log("Get response ", data1)
+        })
+        return data1;
 }
 
 export const fetchPaperByUser =async(id)=> await apiGet(`get-all-paper-by-user/${id}`)

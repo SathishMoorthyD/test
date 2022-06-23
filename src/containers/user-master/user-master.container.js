@@ -6,7 +6,9 @@ import { properties } from '../../components/UserMasterLabelProperties'
 import { saveUserMaster } from '../../services/login/login.service'
 
 export const UserMaster = () => {
-  const rows = [
+  const rows = [{ username: '', email: '',roles:'', id:'' }];
+
+  const rows1 = [
     { userName: 'Krishna', Email: 'krishna@gmail.com',Role:'technical' },
     { userName: 'Bala', Email: 'Bala@gmail.com',Role:'employee' },
     { userName: 'Ramar', Email: 'Ramr@gmail.com',Role:'technical' },
@@ -18,7 +20,14 @@ export const UserMaster = () => {
     { userName: 'thomas', Email: 'thomas@gmail.com',Role:'technical' },
     { userName: 'prabaa', Email: 'prabaa@gmail.com',Role:'technical' },
   ]
+
   const roledata = [
+    { Id:1,roles:'approver' },
+    { Id:2,roles:'admin' },
+    { Id:3,roles:'user' },
+  ]
+
+  const roledata1 = [
     { Id:1,Role:'technical' },
     { Id:2,Role:'employee' },
     { Id:3,Role:'manager' },
@@ -26,48 +35,50 @@ export const UserMaster = () => {
   ]
 
   const [tableRowData, setTableRowData] = useState({Records:rows})
+  
   const [tableColumnData, setTableColumnData] = useState([
     {field:'sl',headerName:'sl',cellRenderer(params){
         return parseInt(params.node.id,10)+1;}},
         
-        {field:'userName',headerName:'User Name'},
-        {field:'Email',headerName:'Email'},
-        {field:'Role',headerName:'Role'},
+        {field:'username',headerName:'User Name'},
+        {field:'email',headerName:'Email'},
+        {field:'roles',headerName:'Role'},
         {field:'Operation',headerName:'Operation',cellRenderer:'operationIconRenderer'},
         ])
+
   let [values, setValues] = useState({
     active: true,
-  email: "",
-  password: "",
-  username: "",
-  role:'',
+    email: "",
+    password: "",
+    username: "",
+    roles:'',
     inputState: {readOnly:false}
-  
   });
+
   const handleChange = (event,field) => {
     setValues({ ...values, [field]: event });
   };
+
   const handleSubmit=async (event )=>{
     event.preventDefault();
     console.log(values)
-      await saveUserMaster(values)
+    //  await saveUserMaster(values)
     handleClose()
     // showToasterSubject.next({type:'success',value:'User Master Added successfully'})
     setValues({
       active: false,
-    email: "",
-    password: "",
-    username: "",
-    role:'',
+      email: "",
+      password: "",
+      username: "",
+      roles:'',
       inputState: {readOnly:false}
-    
     })
     
   }
   
-  const fetchData = async()=>{
-    const response = await fetchUser()
-    setTableRowData(response.data)
+  const fetchData = ()=>{
+    const responseData = fetchUser();
+    responseData.then(function (dataList) {setTableRowData({Records: dataList})});
     // await setTableRowData(rows)
     
    }
@@ -78,8 +89,10 @@ export const UserMaster = () => {
 
 useEffect(() => {
 //createTableData()
-//fetchData()
-});
+fetchData()
+console.log("user-master userEffect..", tableRowData);
+}, []);
+
 const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {

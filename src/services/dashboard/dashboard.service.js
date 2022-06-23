@@ -1,7 +1,7 @@
 import {apiGet, apiPost} from '../api.service'
 export const fetchAllData =async()=> {
     let dashdata=[];
-        await apiPost('api/dashboard/getDashByDate')
+        await apiGet('dashboard')
        
         .then(response => {
             dashdata=response.data;
@@ -13,7 +13,7 @@ export const fetchAllData =async()=> {
 export const getDashByDate =async(data)=> {
     let dashdata=[];
         //await apiPost('getDashByDate', data)
-        await apiPost('api/dashboard/getDashByDate',data)
+        await apiGet('dashboard')
         .then(response => {
             dashdata=response.data;
             console.log("response ", dashdata)

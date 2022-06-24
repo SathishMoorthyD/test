@@ -214,6 +214,7 @@ export default function DashboardComponent(){
 // }
   
 useEffect(() => {
+  sessionStorage.setItem("urlSelected", 0);
   if (section === 'Section' && shift === 'Shift') 
     getData(dateValue);
 

@@ -15,7 +15,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 export  const OperationRender = (props) => {
     let navigate = useNavigate();
-    const {rowDetail} = props
+    const {rowDetail, fetchData} = props
     console.log(rowDetail)
     const [showPassword, setShowPassword] = useState(false)
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -54,9 +54,6 @@ export  const OperationRender = (props) => {
     const handleResetPasswordSubmit=(event )=>{
       event.preventDefault();
       console.log(resetPasswordValues)
-      //  await saveUserMaster(resetPasswordValues)
-      // showToasterSubject.next({type:'success',value:'User Master Added successfully'})
-
       const responseData = changePass(resetPasswordValues);
       //console.log("operation-render reset password ", responseData);
       responseData.then(function(val){
@@ -66,7 +63,7 @@ export  const OperationRender = (props) => {
       {
         handleResetPasswordClose();
         setResetPasswordValues();
-        //navigate("/UserMaster");
+        fetchData();
       }
       })
     }
@@ -85,8 +82,6 @@ export  const OperationRender = (props) => {
     const handleDeleteSubmit=async (event )=>{
       event.preventDefault()
       console.log( resetPasswordValues)
-      //  await saveUserMaster(resetPasswordValues)
-
       const responseData = deleteUser(resetPasswordValues.id);
       //console.log("operation-render delete user ", responseData);
       responseData.then(function(val){
@@ -96,7 +91,8 @@ export  const OperationRender = (props) => {
       {
         handleDeleteClose()
         setResetPasswordValues()
-      // showToasterSubject.next({type:'success',value:'User Master Added successfully'})
+        //showToasterSubject.next({type:'success',value:'User Master Added successfully'})
+        fetchData();
       }
       })
     }

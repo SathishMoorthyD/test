@@ -22,7 +22,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Dialog,DialogActions,DialogContentText,DialogContent,DialogTitle } from '@mui/material';
 
 export const CustomTable = (props ) => {
-  const {tableRowData,handleChange,tableColumnData,roledata,isPaginationVisible,AddLabel,onAddClick,open,handleClose,properties,values,handleSubmit} = props
+  const {tableRowData,handleChange,tableColumnData,roledata,isPaginationVisible,AddLabel,onAddClick,open,handleClose,properties,values,handleSubmit,fetchData} = props
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const filteredColumnFields = _.filter(tableColumnData, (item)=>item.field !== 'sl' && item.field !== 'Edit');
@@ -141,7 +141,7 @@ export const CustomTable = (props ) => {
                      <TableCell  key={columnField.id}>
                      {columnField.cellRenderer !== 'operationIconRenderer'&& tableData}
                     {columnField.cellRenderer === 'operationIconRenderer' &&
-                    <OperationRender rowDetail={row}></OperationRender>
+                    <OperationRender rowDetail={row} fetchData={fetchData}></OperationRender>
                    }
                   </TableCell>
                  

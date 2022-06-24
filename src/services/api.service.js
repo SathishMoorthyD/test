@@ -67,18 +67,18 @@ export const USER_LOGOUT = Boolean(process.env.REACT_APP_URL_CHECK)?"api/usermas
 
 export const HOME_DASHBOARD_GETBYDATE = Boolean(process.env.REACT_APP_URL_CHECK)?"api/dashboard/getDashByDate":"dashboard";
 
-export const MENUA_GETBYID = Boolean(process.env.REACT_APP_URL_CHECK)?"api/jrmaster/get-jrmaster": "MenuA";
-export const MENUA_ADD = Boolean(process.env.REACT_APP_URL_CHECK)?"api/jrmaster/add-jrmaster":"MenuA";
-export const MENUA_REVIEW = Boolean(process.env.REACT_APP_URL_CHECK)?"api/jrmaster/update-jrmaster":"MenuA";
+export const MENUA_GETBYID = Boolean(process.env.REACT_APP_URL_CHECK)?"api/cpp/get-cpp": "MenuA";
+export const MENUA_ADD = Boolean(process.env.REACT_APP_URL_CHECK)?"api/cpp/add-cpp":"MenuA";
+export const MENUA_REVIEW = Boolean(process.env.REACT_APP_URL_CHECK)?"api/cpp/update-cpp":"MenuA";
 
 console.log("api.service " + Boolean(process.env.REACT_APP_URL_CHECK));
 export const MENUB_GETBYID = Boolean(process.env.REACT_APP_URL_CHECK)?"api/finishing/get-finishing":"MenuB";
 export const MENUB_ADD = Boolean(process.env.REACT_APP_URL_CHECK)?"api/finishing/add-finishing":"MenuB";
 export const MENUB_REVIEW = Boolean(process.env.REACT_APP_URL_CHECK)?"api/finishing/update-finishing":"MenuB";
 
-export const MENUC_GETBYID = Boolean(process.env.REACT_APP_URL_CHECK)?"api/cpp/get-cpp":"MenuC";
-export const MENUC_ADD = Boolean(process.env.REACT_APP_URL_CHECK)?"api/cpp/add-cpp":"MenuC";
-export const MENUC_REVIEW = Boolean(process.env.REACT_APP_URL_CHECK)?"api/cpp/update-cpp":"MenuC";
+export const MENUC_GETBYID = Boolean(process.env.REACT_APP_URL_CHECK)?"api/jrmaster/get-jrmaster":"MenuC";
+export const MENUC_ADD = Boolean(process.env.REACT_APP_URL_CHECK)?"api/jrmaster/add-jrmaster":"MenuC";
+export const MENUC_REVIEW = Boolean(process.env.REACT_APP_URL_CHECK)?"api/jrmaster/update-jrmaster":"MenuC";
 
 export const MENUD_GETBYID = Boolean(process.env.REACT_APP_URL_CHECK)?"api/paper/get-paper":"MenuD";
 export const MENUD_ADD = Boolean(process.env.REACT_APP_URL_CHECK)?"api/paper/add-paper":"MenuD";
@@ -89,6 +89,6 @@ export const MENUE_ADD = Boolean(process.env.REACT_APP_URL_CHECK)?"api/pulp/add-
 export const MENUE_REVIEW = Boolean(process.env.REACT_APP_URL_CHECK)?"api/pulp/update-pulp":"MenuE";
 
 export const USER_MASTER_GET = Boolean(process.env.REACT_APP_URL_CHECK)?"api/usermaster/get-all-user":"getusermaster";
-export const USER_MASTER_ADD = Boolean(process.env.REACT_APP_URL_CHECK)?"api/usermaster/add-usermaster":"usermaster";
+export const USER_MASTER_ADD = Boolean(process.env.REACT_APP_URL_CHECK)?"api/usermaster/add-usermaster":"usermaster/1";
 export const USER_MASTER_DEL = Boolean(process.env.REACT_APP_URL_CHECK)?"api/usermaster/delete-user":"deleteuser/1";
 export const USER_MASTER_CPASS = Boolean(process.env.REACT_APP_URL_CHECK)?"api/usermaster/change-password":"changepass/1";

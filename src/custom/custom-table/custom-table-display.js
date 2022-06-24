@@ -17,29 +17,37 @@ super(props);
     }
     
     enMenu = (menuid) => {
-        let apiMenu = "Menu";
+        let apiMenu = {menuId:'', menuIndex:-1};
         switch(menuid)
         {
           case "CPP":
           case "MenuA":
-            apiMenu = "MenuA";
+            apiMenu.menuId = "MenuA";
+            apiMenu.menuIndex = 3;
             break;
           case "FIN":
           case "MenuB":
-            apiMenu = "MenuB";
+            apiMenu.menuId = "MenuB";
+            apiMenu.menuIndex = 5;
             break;
           case "JRM":
           case "MenuC":
-            apiMenu = "MenuC";
+            apiMenu.menuId = "MenuC";
+            apiMenu.menuIndex = 4;
             break;
           case "PAPER":
           case "MenuD":
-            apiMenu = "MenuD";
+            apiMenu.menuId = "MenuD";
+            apiMenu.menuIndex = 2;
             break;
           case "PULP":
           case "MenuE":
-            apiMenu = "MenuE";
+            apiMenu.menuId = "MenuE";
+            apiMenu.menuIndex = 1;
             break;
+          default:
+            apiMenu.menuId = "dashboard";
+            apiMenu.menuIndex = 0;
         }
         return apiMenu;
     }
@@ -49,7 +57,10 @@ super(props);
      console.log("table submit"+this.props.records.approval_status)
     //  let navigate = useNavigate(); 
     console.log("field_id "+this.props.records.menu_id)
-    var path="/"+this.enMenu(this.props.records.menu_name)+"/?menu_id="+this.props.records.menu_id;
+    let menuDetails = this.enMenu(this.props.records.menu_name);
+    var path="/"+menuDetails.menuId+"/?menu_id="+this.props.records.menu_id;
+    //alert(menuDetails.menuIndex);
+    sessionStorage.setItem("urlSelected", menuDetails.menuIndex);
     // navigate(path);
     window.location.href = path;
    

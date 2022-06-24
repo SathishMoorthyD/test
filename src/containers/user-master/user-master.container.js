@@ -6,6 +6,7 @@ import { properties } from '../../components/UserMasterLabelProperties'
 import { saveUserMaster } from '../../services/login/login.service'
 
 export const UserMaster = () => {
+  
   const rows = [{ username: '', email: '',roles:'', id:'' }];
 
   const rows1 = [
@@ -59,21 +60,28 @@ export const UserMaster = () => {
     setValues({ ...values, [field]: event });
   };
 
-  const handleSubmit=async (event )=>{
+  const handleSubmit=(event )=>{
     event.preventDefault();
     console.log(values)
-    //  await saveUserMaster(values)
-    handleClose()
-    // showToasterSubject.next({type:'success',value:'User Master Added successfully'})
-    setValues({
-      active: false,
-      email: "",
-      password: "",
-      username: "",
-      roles:'',
-      inputState: {readOnly:false}
+    const userAdd = saveUserMaster(values)
+    userAdd.then(function (val)
+    {
+      alert(val.data);
+      if (val.status === 200)
+      {
+          setValues({
+          active: false,
+          email: "",
+          password: "",
+          username: "",
+          roles:'',
+          inputState: {readOnly:false}
+        })
+        handleClose()
+        // showToasterSubject.next({type:'success',value:'User Master Added successfully'})
+        fetchData();
+      }
     })
-    
   }
   
   const fetchData = ()=>{
@@ -110,7 +118,7 @@ const [open, setOpen] = React.useState(false);
           </div>
       <div class="card">
     
-    <CustomTable tableRowData={tableRowData?.Records}values={values} roledata ={roledata} handleSubmit={handleSubmit} handleChange={handleChange} properties={properties} tableColumnData={tableColumnData} open={open} onAddClick={handleClickOpen} handleClose={handleClose}  AddLabel={'Add User'} isPaginationVisible={false}/>
+    <CustomTable tableRowData={tableRowData?.Records}values={values} roledata ={roledata} handleSubmit={handleSubmit} handleChange={handleChange} properties={properties} tableColumnData={tableColumnData} open={open} onAddClick={handleClickOpen} handleClose={handleClose}  AddLabel={'Add User'} isPaginationVisible={false} fetchData={fetchData}/>
 </div>
    
   </div>

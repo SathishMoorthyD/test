@@ -35,8 +35,8 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { padding } from '@mui/system';
 
 
-export default function DashboardComponent(){
-
+export default function DashboardComponent(props){
+  const {handleRouter} = props;
   let [dateValue, setDateValue] = useState(new Date())
   let [records, setRecords] = useState([])
   let [records1, setRecords1] = useState([])
@@ -214,7 +214,7 @@ export default function DashboardComponent(){
 // }
   
 useEffect(() => {
-  sessionStorage.setItem("urlSelected", 0);
+  handleRouter(0);
   if (section === 'Section' && shift === 'Shift') 
     getData(dateValue);
 
@@ -234,6 +234,7 @@ const getData = (dateValue) => {
     // console.log("val",val);
     setRecords(val)      
     setRecords1(val)      
+
 });
 // console.log("records",records)
 }

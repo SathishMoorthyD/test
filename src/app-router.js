@@ -14,7 +14,10 @@ import { Login } from './containers/login/login.container.js';
 import { UserMaster } from './containers/user-master/user-master.container.js';
 
 
-export const AppRouter = () => <BrowserRouter>
+export const AppRouter = (props) => { 
+const {handleRouter} = props;
+
+return (<BrowserRouter>
 <Routes>
   <Route path="/" element={<Login />} />
   <Route path="/MenuA" element={<CPP />} />
@@ -24,7 +27,8 @@ export const AppRouter = () => <BrowserRouter>
   <Route path="/MenuC" element={<MenuCComponent />} />
   <Route path="/MenuD" element={<MenuDComponent />} />
   <Route path="/MenuE" element={<MenuEComponent />} />
-  <Route path="/dashboard" element={<DashboardComponent />} />
-  <Route path="/UserMaster" element={<UserMaster />} />
+  <Route path="/dashboard" element={<DashboardComponent handleRouter={handleRouter}/>}/>
+  <Route path="/UserMaster" element={<UserMaster handleRouter={handleRouter}/>} />
 </Routes>
-</BrowserRouter>
+</BrowserRouter>)
+}

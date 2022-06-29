@@ -118,8 +118,9 @@ const routerpath =[
     
 ]
 const handleRouter=(i)=>{
-  //alert (i);
+  //alert ("header handleRouter: ", i);
   sessionStorage.setItem("urlSelected", i);
+  setUrlSelected(i);
 }
 
 const handleLogout=()=>{
@@ -287,7 +288,8 @@ const handleClose = () => {
                   backgroundColor: "#aedada", borderRadius: 2,
                   maxWidth:'85%', color:'green'
                   }}} 
-              selected={index === Number(sessionStorage.getItem("urlSelected"))} 
+              //selected={index === Number(sessionStorage.getItem("urlSelected"))} 
+              selected={index === Number(urlSelected)}
               button key={index} onClick={()=>handleRouter(index)}>
               <ListItemIcon class="p-2 mr-2">
                {router.icon}
@@ -307,7 +309,7 @@ const handleClose = () => {
         open={open}
        >
         <Toolbar />
-        <AppRouter></AppRouter>
+        <AppRouter handleRouter={handleRouter}></AppRouter>
       </Box>
     </Box>
   </div>

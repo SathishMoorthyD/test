@@ -5,8 +5,8 @@ import { properties } from '../../components/UserMasterLabelProperties'
 
 import { saveUserMaster } from '../../services/login/login.service'
 
-export const UserMaster = () => {
-  
+export const UserMaster = (props) => {
+  const {handleRouter} = props;  
   const rows = [{ username: '', email: '',roles:'', id:'' }];
 
   const rows1 = [
@@ -97,6 +97,9 @@ export const UserMaster = () => {
 
 useEffect(() => {
 //createTableData()
+//Required to set menu highlight appropriately
+handleRouter(6);
+
 fetchData()
 console.log("user-master userEffect..", tableRowData);
 }, []);

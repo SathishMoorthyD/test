@@ -73,8 +73,8 @@ export const MENUA_REVIEW = Boolean(process.env.REACT_APP_URL_CHECK)?"api/cpp/up
 
 console.log("api.service " + Boolean(process.env.REACT_APP_URL_CHECK));
 export const MENUB_GETBYID = Boolean(process.env.REACT_APP_URL_CHECK)?"api/finishing/get-finishing":"MenuB";
-export const MENUB_ADD = Boolean(process.env.REACT_APP_URL_CHECK)?"api/finishing/add-finishing":"MenuB";
-export const MENUB_REVIEW = Boolean(process.env.REACT_APP_URL_CHECK)?"api/finishing/update-finishing":"MenuB";
+export const MENUB_ADD = Boolean(process.env.REACT_APP_URL_CHECK)?"api/finishing/add-finishing":"MenuB/1";
+export const MENUB_REVIEW = Boolean(process.env.REACT_APP_URL_CHECK)?"api/finishing/update-finishing":"MenuB/1";
 
 export const MENUC_GETBYID = Boolean(process.env.REACT_APP_URL_CHECK)?"api/jrmaster/get-jrmaster":"MenuC";
 export const MENUC_ADD = Boolean(process.env.REACT_APP_URL_CHECK)?"api/jrmaster/add-jrmaster":"MenuC";

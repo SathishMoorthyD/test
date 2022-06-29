@@ -1,4 +1,4 @@
-import {apiPost,apiGet, USER_MASTER_GET, USER_MASTER_CPASS, USER_LOGOUT, USER_MASTER_DEL, USER_LOGIN} from '../api.service'
+import {apiPost,apiGet, USER_MASTER_GET, USER_MASTER_CPASS, USER_LOGOUT, USER_MASTER_DEL, USER_LOGIN, USER_MASTER_ADD} from '../api.service'
 
 //export const login =async(data)=> await apiPost('api/usermaster/login-authenticate',data)
 export const login =async(data)=> {
@@ -21,7 +21,13 @@ export const logout =async(id)=> {
     return responseDataObj;
 }
 
-export const saveUserMaster =async(data)=> await apiPost('api/usermaster/add-usermaster',data)
+export const saveUserMaster =async(data)=> {
+    let userAddRes = {status:200, data:''};
+    await apiPost(USER_MASTER_ADD,data)
+    //await apiGet(USER_MASTER_ADD,data)
+    .then (response => {console.log(response.data); userAddRes = response.data;})
+    return userAddRes;
+}
 
 export const fetchUser =async()=> {
     let usermasterdata = [];

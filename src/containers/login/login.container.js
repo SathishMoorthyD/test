@@ -44,7 +44,7 @@ export const Login = () => {
     localStorage.setItem('UserId',((resUserData.userid || resUserData.userid !== undefined)?resUserData.userid:values.username));
     showToasterSubject.next({type:'success',value:'login successfully'})
     
-    window.location.reload();
+    //window.location.reload();
     navigate(getNavLink(localStorage.getItem('Role')));
     })
   }
